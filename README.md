@@ -3,7 +3,7 @@
 
 Inspired by - but improves upon - the [tide](https://github.com/IlanCosman/tide) prompt for [fish](https://fishshell.com/) shell.
 
-But for good 'ol regular bash terminals.
+But for good 'ol regular bash terminals. (Which is a bonus if you prefer Bash over Fish as a syntax and language. But Fish's suggestion/auto-completion functionality is admittedly really, really cool.)
 
 <!-- omit in TOC -->
 ## Table of contents
