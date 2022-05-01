@@ -17,16 +17,12 @@
 ##
 ##	Installation instructions:
 ##
-##	    1) Move this to some location in your path.
+##		1) Move this to some location in your path."
 ##
-##	    2) Add this, verbatim, to the bottom of your ~./bashrc:
-##	       PROMPT_COMMAND=\"PS1=\\\$(x9ps1-git)\""
+##		2) Add this, verbatim, to the bottom of your ~./bashrc:"
+##		   PROMPT_COMMAND='PS1=`x9ps1-git`'
 ##
-##		   If you'd rather test it out first, then execute this, verbatim,
-##         on the command line:
-##		   PROMPT_COMMAND="PS1=\$(x9ps1-git)"
-##
-##	    3) Exit your current terminal and open a new one.
+##		3) Exit your current terminal and open a new one."
 ##
 ##	Note:
 ##		If you run this script in a way not outlined above, and it produces garbage on the CLI,
