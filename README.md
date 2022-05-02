@@ -12,7 +12,7 @@ But for good 'ol regular bash terminals. (Which is a bonus if you prefer Bash ov
 - [Installation](#installation)
 - [Feature comparison](#feature-comparison)
 - [Other notes](#other-notes)
-- [Slow down there tonto](#slow-down-there-tonto)
+- [But is it REALLY better than Fish](#but-is-it-really-better-than-fish)
 
 ## Overview
 
@@ -24,7 +24,9 @@ The tide prompt for fish shell is fantastic for working with `git` on the comman
 1. Execute: `wget https://raw.githubusercontent.com/jim-collier/x9ps1-git/main/x9ps1-git`
    - If it's a system directory, you'll need to prepend `sudo` to that command.
 1. Execute: `sudo chmod +x x9ps1-git`
-1. Edit your `~/.bashrc` and append to the end, verbatim:
+1. Alternately, if you have the entire git project downloaded and already have the script installed somewhere else in your path, and want to update it:
+   - `tmpExisting="$(which x9ps1-git)" && cp x9ps1-git "${tmpExisting}" && chmod +x "${tmpExisting}"`
+3. Edit your `~/.bashrc` and append to the end, verbatim:
    - ``PROMPT_COMMAND='PS1=`x9ps1-git`'``
 
 ## Feature comparison
@@ -51,9 +53,9 @@ The tide prompt for fish shell is fantastic for working with `git` on the comman
 - If bash is not currently in a git repository folder, the prompt looks similar to most stock prompts. But if it is in a git folder, it expands to two lines in order to include all of the information.
 - The hostname element is already nested in the analogue to a switch or case block, so that the hostname can be colored differently depending on the name. (In case this script is synced across multiple hosts.)
 
-## Slow down there tonto
+## But is it REALLY better than Fish
 
-"Tonto" is an anachronistic - and to some, highly offensive - term. So I changed it to lower-case so as to not be a proper noun. Now it's all good. Moving on:
+No.
 
 Fish (which enables Tide to exist) is an amazing group effort of real programming. It's an altogether new shell.
 
