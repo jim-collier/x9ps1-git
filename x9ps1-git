@@ -1,4 +1,5 @@
 #!/bin/bash
+
 # shellcheck disable=2004  ## Inappropriate complaining of "$/${} is unnecessary on arithmetic variables."
 # shellcheck disable=2034  ## Unused variables.
 # shellcheck disable=2119  ## Disable confusing and inapplicable warning about function's $1 meaning script's $1.
@@ -30,6 +31,10 @@
 ##
 ##	History:
 ##		- 20201001 JC: Created.
+##		- 20220501 JC: Fixed instruction #2.
+##		- 20220502 JC:
+##			- Project no longer needs to be in a path with 'git' in it. (That was weird.)
+##			- Improved readability for custom hostname formatting.
 
 
 function fMain() {
@@ -94,18 +99,16 @@ function fMain() {
 	local colorTime="             ${styleDim}         ; ${fgCyan}   "
 	local colorAttn="             ${styleLight}       ; ${fgGreen}   "
 
-	## Unique hostname colors, with default
-	if   [[ "${HOSTNAME}" == "b12" ]]; then
-		local colorHostname="     ${styleReverse}     ; ${fgPurple}   "
-	elif [[ "${HOSTNAME}" == "b15" ]]; then
-		local colorHostname="     ${styleReverse}     ; ${fgYellow}   "
-	elif [[ "${HOSTNAME}" == "b16" ]]; then
-		local colorHostname="     ${styleBold}        ; ${fgRed}   "
-	elif [[ "${HOSTNAME}" == "b17" ]]; then
-		local colorHostname="     ${styleBold}        ; ${fgBlue}   "
-	else
-		local colorHostname="     ${styleLight}       ; ${fgWhite}   "
-	fi
+	## Unique hostname colors, with default; feel free to add, change, delete
+	case "${HOSTNAME}" in
+		"b15")       local colorHostname="${styleBold}   ; ${fgBlue}   " ;;
+		"b16")       local colorHostname="${styleBold}   ; ${fgRed}    " ;;
+		"b17")       local colorHostname="${styleBold}   ; ${fgPurple} " ;;
+		"b23")       local colorHostname="${styleBold}   ; ${fgYellow} " ;;
+		"vm925w")    local colorHostname="${styleBold}   ; ${fgCyan}   " ;;
+		"xub2004a")  local colorHostname="${styleBold}   ; ${fgGreen}  " ;;
+		*)           local colorHostname="${styleLight}  ; ${fgWhite}  " ;;
+	esac
 
 	## Repo status
 	local colorStatus_Yes="       ${styleReverse}     ; ${fgGreen}   "
@@ -145,76 +148,72 @@ function fMain() {
 	local -r final_BracketL="${colorMiscDelim}[${colorRESET}"
 	local -r final_BracketR="${colorMiscDelim}]${colorRESET}"
 
-	## To save time most of the time, see if "git*" is somewhere in the pach.
-	if [[ -n "$(pwd | grep -iP "[^a-z]git" 2>/dev/null || true)" ]]; then
+	## To save time, see if git is even installed.
+	if [[ -n "$(which git 2>/dev/null || true)" ]]; then
 
-		## To save time, see if git is even installed.
-		if [[ -n "$(which git 2>/dev/null || true)" ]]; then
+		## Git repo
+		local -r gitRepo="$(git config --get remote.origin.url 2>/dev/null | cut -f 2 -d "@" || true)"
+		if [[ -n "${gitRepo}" ]]; then
 
-			## Git repo
-			local -r gitRepo="$(git config --get remote.origin.url 2>/dev/null | cut -f 2 -d "@" || true)"
-			if [[ -n "${gitRepo}" ]]; then
+			## Encoded repo
+			local -r encodedPartial_Repo="${colorRepo}${gitRepo}${colorRESET}"
 
-				## Encoded repo
-				local -r encodedPartial_Repo="${colorRepo}${gitRepo}${colorRESET}"
+			## Git branch
+			local -r gitBranch="$(git branch 2>/dev/null | grep -i "*" | grep -iPo "[^\*\ ]+" || true)"
+			if [[ -n "${gitBranch}" ]]; then
 
-				## Git branch
-				local -r gitBranch="$(git branch 2>/dev/null | grep -i "*" | grep -iPo "[^\*\ ]+" || true)"
-				if [[ -n "${gitBranch}" ]]; then
+				## Encoded branch
+				local -r encodedPartial_Branch="${colorBranch}${gitBranch}${colorRESET}"
 
-					## Encoded branch
-					local -r encodedPartial_Branch="${colorBranch}${gitBranch}${colorRESET}"
-
-					## Git status
-					local -r gitStatus="$(git status 2>/dev/null || true)"
-					if [[ -n "${gitStatus}" ]]; then
-						## Committed locally
-						if [[ -n "$(echo "${gitStatus}" | grep -iPo "nothing to commit" 2>/dev/null || true)" ]]; then
-							local -r -i isCommitted=1
-						else
-							local -r -i isCommitted=0
-						fi
-						## In sync with origin
-						if [[ -n "$(echo "${gitStatus}" | grep -iPo "Your branch is up to date with \'origin\/" 2>/dev/null || true)" ]]; then
-							local -r -i isInSyncWithOrigin=1
-						else
-							local -r -i isInSyncWithOrigin=0
-						fi
+				## Git status
+				local -r gitStatus="$(git status 2>/dev/null || true)"
+				if [[ -n "${gitStatus}" ]]; then
+					## Committed locally
+					if [[ -n "$(echo "${gitStatus}" | grep -iPo "nothing to commit" 2>/dev/null || true)" ]]; then
+						local -r -i isCommitted=1
+					else
+						local -r -i isCommitted=0
 					fi
-
-					## Encoded status
-					encodedPartial_GitStatus=""
-					if [[ ${isCommitted}        -eq 1 ]]; then encodedPartial_GitStatus="${encodedPartial_GitStatus}${colorStatus_Yes}${unicodeCheckmark}"
-					else                                       encodedPartial_GitStatus="${encodedPartial_GitStatus}${colorStatus_Not}${unicodeXmark}"
+					## In sync with origin
+					if [[ -n "$(echo "${gitStatus}" | grep -iPo "Your branch is up to date with \'origin\/" 2>/dev/null || true)" ]]; then
+						local -r -i isInSyncWithOrigin=1
+					else
+						local -r -i isInSyncWithOrigin=0
 					fi
-					if [[ ${isInSyncWithOrigin} -eq 1 ]]; then encodedPartial_GitStatus="${encodedPartial_GitStatus}${colorStatus_Yes}${unicodeCheckmark}"
-					else                                       encodedPartial_GitStatus="${encodedPartial_GitStatus}${colorStatus_Not}${unicodeXmark}"
-					fi
-					encodedPartial_GitStatus="${encodedPartial_GitStatus}${colorRESET}"
-
 				fi
 
-				## Assemble git part of final encoded prompt
-				local -a tmpArray=()
-				tmpArray+=(" ")
-				tmpArray+=("${final_BracketL}")
-				tmpArray+=(" ")
-				[[ -n "${encodedPartial_Repo}" ]] && tmpArray+=("${encodedPartial_Repo}")
-				if [[ -n "${encodedPartial_Branch}"    ]]; then
-					[[ -n "${encodedPartial_Repo}" ]] && tmpArray+=("${final_delim_Colon}")
-					tmpArray+=("${encodedPartial_Branch}")
+				## Encoded status
+				encodedPartial_GitStatus=""
+				if [[ ${isCommitted}        -eq 1 ]]; then encodedPartial_GitStatus="${encodedPartial_GitStatus}${colorStatus_Yes}${unicodeCheckmark}"
+				else                                       encodedPartial_GitStatus="${encodedPartial_GitStatus}${colorStatus_Not}${unicodeXmark}"
 				fi
-				if [[ -n "${encodedPartial_GitStatus}" ]]; then
-					[[ -n "${encodedPartial_Repo}${encodedPartial_Branch}" ]] && tmpArray+=(" ")  ## tmpArray+=("${final_delim_Bullet}")
-					tmpArray+=("${encodedPartial_GitStatus}")
+				if [[ ${isInSyncWithOrigin} -eq 1 ]]; then encodedPartial_GitStatus="${encodedPartial_GitStatus}${colorStatus_Yes}${unicodeCheckmark}"
+				else                                       encodedPartial_GitStatus="${encodedPartial_GitStatus}${colorStatus_Not}${unicodeXmark}"
 				fi
-				tmpArray+=(" ")
-				tmpArray+=("${final_BracketR}")
-				local tmpStr=""
-				for (( i=0; i < ${#tmpArray[@]}; i++ )); do tmpStr="${tmpStr}${tmpArray[i]}"; done
-				local -r final_Git="${tmpStr}"  ## Lock previously devined final_Git
+				encodedPartial_GitStatus="${encodedPartial_GitStatus}${colorRESET}"
 
 			fi
+
+			## Assemble git part of final encoded prompt
+			local -a tmpArray=()
+			tmpArray+=(" ")
+			tmpArray+=("${final_BracketL}")
+			tmpArray+=(" ")
+			[[ -n "${encodedPartial_Repo}" ]] && tmpArray+=("${encodedPartial_Repo}")
+			if [[ -n "${encodedPartial_Branch}"    ]]; then
+				[[ -n "${encodedPartial_Repo}" ]] && tmpArray+=("${final_delim_Colon}")
+				tmpArray+=("${encodedPartial_Branch}")
+			fi
+			if [[ -n "${encodedPartial_GitStatus}" ]]; then
+				[[ -n "${encodedPartial_Repo}${encodedPartial_Branch}" ]] && tmpArray+=(" ")  ## tmpArray+=("${final_delim_Bullet}")
+				tmpArray+=("${encodedPartial_GitStatus}")
+			fi
+			tmpArray+=(" ")
+			tmpArray+=("${final_BracketR}")
+			local tmpStr=""
+			for (( i=0; i < ${#tmpArray[@]}; i++ )); do tmpStr="${tmpStr}${tmpArray[i]}"; done
+			local -r final_Git="${tmpStr}"  ## Lock previously devined final_Git
+
 		fi
 	fi
 
