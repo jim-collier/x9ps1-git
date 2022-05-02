@@ -25,7 +25,7 @@ The tide prompt for fish shell is fantastic for working with `git` on the comman
    - If it's a system directory, you'll need to prepend `sudo` to that command.
 1. Execute: `sudo chmod +x x9ps1-git`
 1. Edit your `~/.bashrc` and append to the end, verbatim:
-   - `PROMPT_COMMAND=\"PS1=\\\$(x9ps1-git)\""`
+   - ``PROMPT_COMMAND='PS1=`x9ps1-git`'``
 
 ## Feature comparison
 
