@@ -62,7 +62,7 @@ The tide prompt for fish shell is fantastic for working with `git` on the comman
 ~~~bash
 ## Download to any directory in $PATH (/usr/local/sbin in this example)
 cd /usr/local/sbin
-sudo wget https://raw.githubusercontent.com/jim-collier/x9ps1-git/main/x9ps1-git  ## No
+sudo wget https://raw.githubusercontent.com/jim-collier/x9ps1-git/main/x9ps1-git
 sudo chmod +x x9ps1-git
 
 ## Execute now to apply to current terminal prompt
