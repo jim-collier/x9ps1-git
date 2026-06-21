@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # shellcheck disable=2004  ## Inappropriate complaining of "$/${} is unnecessary on arithmetic variables."
+# shellcheck disable=2028  ## echo may not expand escape sequences. Use printf. (This is bad advice for ANSI escape sequences.)
 # shellcheck disable=2034  ## Unused variables.
 # shellcheck disable=2119  ## Disable confusing and inapplicable warning about function's $1 meaning script's $1.
 # shellcheck disable=2154  ## Foo is referenced but not assigned.
@@ -53,9 +54,9 @@ function fMain() {
 		local -i color_prompt=0
 		{ [[ -x /usr/bin/tput ]] && tput setaf 1 >&/dev/null; }  &&  color_prompt=1
 		if ((color_prompt)); then
-			PROMPT_COMMAND='PS1="${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "'
+			echo "${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "
 		else
-			PROMPT_COMMAND='PS1="${debian_chroot:+($debian_chroot)}\u@\h:\w\$ "'
+			echo "${debian_chroot:+($debian_chroot)}\u@\h:\w\$ "
 		fi
 		return 0
 	fi
