@@ -28,16 +28,15 @@
 ##	Note:
 ##		If you run this script in a way not outlined above, and it produces garbage on the CLI,
 ##		just close the terminal and open up a new one.
-##
-##	History:
-##		- 20201001 JC: Created.
-##		- 20220501 JC: Fixed instruction #2.
-##		- 20220502 JC:
-##			- Project no longer needs to be in a path with 'git' in it. (That was weird.)
-##			- Improved readability for custom hostname formatting.
+
+##	History at bottom of script (maintained here in addition to source control)
 
 
 function fMain() {
+
+	## Quick options
+	local -ri addArrowToEnd=1
+	local -ri addNewlineToEnd=0
 
 	## PS1 elements
 	local -r UserName="\u"
@@ -87,28 +86,33 @@ function fMain() {
 	local -r fgCyan="         36"
 	local -r fgWhite="        37"
 
-	## Specific element colors "${STYLE} ${COLOR}"; Spaces are OK for formatting, will be removed later.
-	local colorUsername="         ${styleRegular}     ; ${fgGreen}  "
-	local colorAt="               ${styleDim}         ; ${fgWhite}  "
-	local colorColon="            ${styleDim}         ; ${fgWhite}  "
-	local colorPath="             ${styleRegular}     ; ${fgWhite}  "
-	local colorDecorator="        ${styleDim}         ; ${fgWhite}  "
-	local colorRepo="             ${styleRegular}     ; ${fgPurple}   "
-	local colorBranch="           ${styleLight}       ; ${fgCyan}   "
-	local colorMiscDelim="        ${styleDim}         ; ${fgWhite}  "
-	local colorTime="             ${styleDim}         ; ${fgCyan}   "
+	## Specific element colors "${STYLE} ${COLOR}"; Spaces are OK for visual formatting, will be removed later.
+	local colorUsername="         ${styleRegular}     ; ${fgGreen}   "
+	local colorAt="               ${styleDim}         ; ${fgWhite}   "
+	local colorColon="            ${styleDim}         ; ${fgWhite}   "
+	local colorPath="             ${styleRegular}     ; ${fgWhite}   "
+	local colorDecorator="        ${styleDim}         ; ${fgWhite}   "
+	local colorRepo="             ${styleRegular}     ; ${fgPurple}  "
+	local colorBranch="           ${styleLight}       ; ${fgCyan}    "
+	local colorMiscDelim="        ${styleDim}         ; ${fgWhite}   "
+	local colorTime="             ${styleDim}         ; ${fgCyan}    "
 	local colorAttn="             ${styleLight}       ; ${fgGreen}   "
 
+
 	## Unique hostname colors, with default; feel free to add, change, delete
+	local colorHostname=""
 	case "${HOSTNAME}" in
-		"b15")       local colorHostname="${styleBold}   ; ${fgBlue}   " ;;
-		"b16")       local colorHostname="${styleBold}   ; ${fgRed}    " ;;
-		"b17")       local colorHostname="${styleBold}   ; ${fgPurple} " ;;
-		"b23")       local colorHostname="${styleBold}   ; ${fgYellow} " ;;
-		"vm925w")    local colorHostname="${styleBold}   ; ${fgCyan}   " ;;
-		"xub2004a")  local colorHostname="${styleBold}   ; ${fgGreen}  " ;;
-		*)           local colorHostname="${styleLight}  ; ${fgWhite}  " ;;
+		"b12")       colorHostname="${styleBold}   ; ${fgGreen}"    ;;
+		"b15")       colorHostname="${styleBold}   ; ${fgBlue}"     ;;
+		"b16")       colorHostname="${styleBold}   ; ${fgRed}"      ;;
+		"b17")       colorHostname="${styleBold}   ; ${fgPurple}"   ;;
+		"b23")       colorHostname="${styleBold}   ; ${fgRed}"      ;;
+		"vm925w")    colorHostname="${styleBold}   ; ${fgCyan}"     ;;
+		"xub2004a")  colorHostname="${styleBold}   ; ${fgGreen}"    ;;
+		"t2nsn")     colorHostname="${styleBold}   ; ${fgPurple}"   ;;
+		*)           colorHostname="${styleLight}  ; ${fgWhite} "   ;;
 	esac
+
 
 	## Repo status
 	local colorStatus_Yes="       ${styleReverse}     ; ${fgGreen}   "
@@ -217,20 +221,9 @@ function fMain() {
 		fi
 	fi
 
-	## Add all the other stuff to the final encoded prompt, and output it
-	## final_Time
-	## final_Username
-	## final_Hostname
-	## final_Path
-	## final_Git
-	## final_delim_At
-	## final_delim_Colon
-	## final_delim_Bullet
-	## final_BracketL
-	## final_BracketR
-	## final_UserOrRootDecorator
+	####
+	#### Build final output string
 
-	## Build final output string
 	local -a tmpArray=()
 	tmpArray+=("${final_Time}")
 	tmpArray+=(" ")
@@ -241,18 +234,21 @@ function fMain() {
 	tmpArray+=("${final_Path}")
 	if [[ -n "${final_Git}" ]]; then
 		tmpArray+=("${final_Git}")
-		tmpArray+=("\n${colorAttn}🡆${colorRESET}")  ## ★⭑🡆
+		((addArrowToEnd))  &&  tmpArray+=("\n${colorAttn}🡆${colorRESET}")
 	fi
-	tmpArray+=(" ")
+	if ((addNewlineToEnd)); then
+		tmpArray+=("${Newline}")
+	else
+		tmpArray+=(" ")
+	fi
 	tmpArray+=("${final_UserOrRootDecorator}")
 	tmpArray+=(" ")
+
 	local tmpStr=""
 	for (( i=0; i < ${#tmpArray[@]}; i++ )); do tmpStr="${tmpStr}${tmpArray[i]}"; done
 
 	## Final return value (only do one or the other)
 	echo "${tmpStr}"
-#	echo "PS1=\"${tmpStr}\""
-#	PS1="${tmpStr}"; export PS1
 
 }
 
@@ -260,3 +256,16 @@ set -e
 set -E
 
 fMain
+set +eE
+
+
+##	History at bottom of script (maintained here in addition to source control)
+##		- 20201001 JC: Created.
+##		- 20220501 JC: Fixed instruction #2.
+##		- 20220502 JC:
+##			- Project no longer needs to be in a path with 'git' in it. (That was weird.)
+##			- Improved readability for custom hostname formatting.
+##		- 20230920 JC: Added easy option to add newline to end.
+##		- 20260508 JC:
+##			- Set $addNewlineToEnd=0. I'll probably soon realize why it was =1.
+##			- Added $addArrowToEnd to easily add or remove the post-git status arrow.
