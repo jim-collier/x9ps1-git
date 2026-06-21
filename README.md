@@ -48,31 +48,14 @@ But for good 'ol regular bash terminals...
 ## Table of contents
 
 - [Overview](#overview)
-- [Installation](#installation)
 - [Feature comparison](#feature-comparison)
 - [Other notes](#other-notes)
 - [But is it REALLY better than Fish](#but-is-it-really-better-than-fish)
+- [Installation](#installation)
 
 ## Overview
 
 The tide prompt for fish shell is fantastic for working with `git` on the command-line. The prompt tells you what branch your on, and if there are uncommitted changes.
-
-## Installation
-
-~~~bash
-## Download to any directory in $PATH (/usr/local/sbin in this example)
-cd /usr/local/sbin
-sudo wget https://raw.githubusercontent.com/jim-collier/x9ps1-git/main/x9ps1-git
-sudo chmod +x x9ps1-git
-
-## Execute now to apply to current terminal prompt
-PROMPT_COMMAND='PS1=`x9ps1-git`'
-
-## Add the command to your personal .bashrc so that all terminals get the prompt
-echo -e "\nPROMPT_COMMAND='PS1=`x9ps1-git`'\n" | tee -a ~/.bashrc
-~~~
-
-*Note: If installing to a user folder rather than system, don't prepend `sudo` to commands.*
 
 ## Feature comparison
 
@@ -100,12 +83,27 @@ echo -e "\nPROMPT_COMMAND='PS1=`x9ps1-git`'\n" | tee -a ~/.bashrc
 
 ## But is it REALLY better than Fish
 
-No.
+Fish is an amazing group effort of real programming. It's an altogether new shell.
 
-Fish (which enables Tide to exist) is an amazing group effort of real programming. It's an altogether new shell.
+This, however, is just a script to change the bash shell prompt. Granted, it's a script that took years of fine-tuning (not continuously of course), but just a bash script.
 
-OTOH this is just a bash script. Granted, a script that took years of fine-tuning (not continuously of course), but just a script.
+## Installation
 
-But in spite of what was designed to feel like "configuration by declaration", it is in fact "configuration by procedural code".
+~~~bash
+## Download to any directory in $PATH (/usr/local/sbin in this example)
+cd /usr/local/sbin
+sudo wget https://raw.githubusercontent.com/jim-collier/x9ps1-git/main/x9ps1-git
+sudo chmod +x x9ps1-git
 
-Want multiple configurations? Then make multiple copies of the script, and edit each one.
+## Execute now to apply to current terminal prompt
+PROMPT_COMMAND='PS1=`x9ps1-git`'
+
+## Add the command to your personal .bashrc so that all terminals get the prompt
+echo -e "\nPROMPT_COMMAND='PS1=`x9ps1-git`'\n" | tee -a ~/.bashrc
+~~~
+
+*Note: If installing to a user folder rather than system, don't prepend `sudo` to commands.*
+
+`x9ps1-git` was designed to feel like "configuration by declaration", but it is (obviously) in fact "configuration by procedural code".
+
+Want multiple configurations? Make multiple copies of the script, and edit each one. (This concept could be expanded - probably without too much effort - to make `x9ps1-git` an immutable base script, that other much simpler "flavor" scripts source.)
