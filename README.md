@@ -49,17 +49,19 @@ But for good 'ol regular bash terminals...
 
 - [Overview](#overview)
 - [Feature comparison](#feature-comparison)
+- [Screenshots](#screenshots)
 - [Other notes](#other-notes)
-- [But is it REALLY better than Fish](#but-is-it-really-better-than-fish)
 - [Installation](#installation)
 
 ## Overview
 
-The tide prompt for fish shell is fantastic for working with `git` on the command-line. The prompt tells you what branch your on, and if there are uncommitted changes.
+The `tide` prompt for `fish` shell is fantastic for working with `git` on the command-line. The prompt tells you what branch your on, and if there are uncommitted changes.
+
+`x9ps1-git` takes `tide`'s idea a bit further - but for `bash`.
 
 ## Feature comparison
 
-| Feature                                          | Exists in fish/tide? | Exists in x9ps1-git? |
+| Feature                                          | Fish+tide? | x9ps1-git? |
 |:---                                              | :---: | :---: |
 | Doesn't show git info if not in a repo directory | ✔     | ✔     |
 | Shows active repo                                |       | ✔     |
@@ -69,41 +71,48 @@ The tide prompt for fish shell is fantastic for working with `git` on the comman
 | Shows time of last prompt/status update          |       | ✔     |
 | Compresses path display (a pro and a con)        | ✔     |       |
 | Has a cool, memorable name                       | ✔     |       |
-| Stupid-easy to customize prompt¹                 |       | ✔     |
+| Easy to customize prompt¹                        |       | ✔     |
 
 **Footnotes**
-¹ *Includes defined color macros and defined prompt primitives.*
+¹ *Script includes defined color macros and defined prompt primitives.*
+
+## Screenshots
+
+- Not in github repo directory
+
+	![Not in github repo directory](assets/example1.png)
+
+- In github repo directory
+
+	![In github repo directory](assets/example2.png)
 
 ## Other notes
 
+- If the terminal is not currently in a git repository folder, the prompt looks similar to most stock prompts. But if it is in a git folder, it expands to two lines in order to include all of the information.
+
 - The program is a fairly small bash script can be easily edited - to add, remove, and/or reorganize the prompt.
+
 - Colors can be assigned to individual elements.
-- If bash is not currently in a git repository folder, the prompt looks similar to most stock prompts. But if it is in a git folder, it expands to two lines in order to include all of the information.
+
 - The hostname element is already nested in the analogue to a switch or case block, so that the hostname can be colored differently depending on the name. (In case this script is synced across multiple hosts.)
 
-## But is it REALLY better than Fish
+- Want multiple configurations? Make multiple copies of the script, and edit each one.
 
-Fish is an amazing group effort of real programming. It's an altogether new shell.
-
-This, however, is just a script to change the bash shell prompt. Granted, it's a script that took years of fine-tuning (not continuously of course), but just a bash script.
+	- *Note: This concept could be expanded - probably without too much effort - to make `x9ps1-git` an immutable base script, that other much simpler "flavor" scripts source.*
 
 ## Installation
+
+If installing to a user folder rather than system-wide, don't prepend `sudo` to commands.
 
 ~~~bash
 ## Download to any directory in $PATH (/usr/local/sbin in this example)
 cd /usr/local/sbin
-sudo wget https://raw.githubusercontent.com/jim-collier/x9ps1-git/main/x9ps1-git
+sudo wget https://raw.githubusercontent.com/jim-collier/x9ps1-git/main/bin/x9ps1-git
 sudo chmod +x x9ps1-git
 
-## Execute now to apply to current terminal prompt
+## Apply to current terminal prompt
 PROMPT_COMMAND='PS1=`x9ps1-git`'
 
 ## Add the command to your personal .bashrc so that all terminals get the prompt
 echo -e "\nPROMPT_COMMAND='PS1=`x9ps1-git`'\n" | tee -a ~/.bashrc
 ~~~
-
-*Note: If installing to a user folder rather than system, don't prepend `sudo` to commands.*
-
-`x9ps1-git` was designed to feel like "configuration by declaration", but it is (obviously) in fact "configuration by procedural code".
-
-Want multiple configurations? Make multiple copies of the script, and edit each one. (This concept could be expanded - probably without too much effort - to make `x9ps1-git` an immutable base script, that other much simpler "flavor" scripts source.)
