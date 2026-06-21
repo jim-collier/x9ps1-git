@@ -25,6 +25,11 @@
 ##
 ##		3) Exit your current terminal and open a new one."
 ##
+##	Usage:
+##
+##		- If you want to revert to a typical linux terminal prompt at any time temporarily,
+##		  set X9PS1_STANDARD=1.
+##
 ##	Note:
 ##		If you run this script in a way not outlined above, and it produces garbage on the CLI,
 ##		just close the terminal and open up a new one.
@@ -290,3 +295,6 @@ set +eE
 ##		- 20260508 JC:
 ##			- Set $addNewlineToEnd=0. I'll probably soon realize why it was =1.
 ##			- Added $addArrowToEnd to easily add or remove the post-git status arrow.
+##		- 20260621 JC:
+##			- Chanced license from GPLv3 to MIT.
+##			- Added X9PS1_STANDARD flag.
