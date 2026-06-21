@@ -42,7 +42,7 @@ Inspired by - but improves upon - the [tide](https://github.com/IlanCosman/tide)
 But for good 'ol regular bash terminals...
 
 - Which is a bonus if you prefer Bash over Fish as a syntax and language.
-- Fish's suggestion/auto-completion functionality is admittedly really cool - though the `ble` project for Bash is arguably nearly as good if not better, taste-dependent.
+- Fish's suggestion/auto-completion functionality is admittedly really cool - though the [ble](https://github.com/akinomyoga/ble.sh) project for Bash is arguably nearly as good if not better (taste-dependent).
 
 <!-- omit in TOC -->
 ## Table of contents
