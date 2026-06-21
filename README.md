@@ -78,13 +78,13 @@ The `tide` prompt for `fish` shell is fantastic for working with `git` on the co
 
 ## Screenshots
 
-- Not in github repo directory
+- Not in a github repo directory
 
 	![Not in github repo directory](assets/example1.png)
 
-- In github repo directory
+- In a (any) github repo directory
 
-	![In github repo directory](assets/example2.png)
+	![In a github repo directory](assets/example2.png)
 
 ## Other notes
 
