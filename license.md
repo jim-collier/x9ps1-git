@@ -1,6 +1,6 @@
 # The MIT License (MIT)
 
-Copyright © 2026 Jim Collier (ID: 1cv◂‡Vᛦ)
+Copyright © 2026 Jim Collier [ID: 2უNაɘ«҂թȹɤξπ๙¿ձϖ]
 
 Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation
