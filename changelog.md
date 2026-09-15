@@ -24,6 +24,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Other work
 -->
 
+## Unreleased
+
+### Fixed
+
+- A branch or remote name holding `$(...)`, backticks or `${...}` ran as a command at every prompt. Names from git are now escaped before they go into PS1, and show as the characters they hold.
+
 ## v1.0.1 build 1n1bed5 - 20260526
 
 ### Notes
