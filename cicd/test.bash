@@ -6,6 +6,7 @@
 # shellcheck disable=2001   ## Complaining about use of sed istead of bash search & replace.
 # shellcheck disable=2002   ## Useless use of cat. This works well though and I don't want to break it for the sake of syntax purity.
 # shellcheck disable=2004   ## Inappropriate complaining of "$/${} is unnecessary on arithmetic variables."
+# shellcheck disable=2016   ## Expressions don't expand in single quotes. Test names hold them on purpose.
 # shellcheck disable=2119   ## Disable confusing and inapplicable warning about function's $1 meaning script's $1.
 # shellcheck disable=2120   ## OK with declaring variables that accept arguments, without calling with arguments (this is 'overloading').
 # shellcheck disable=2143   ## Used grep -q instead of echo | grep
@@ -36,6 +37,36 @@
 set -e
 declare doLongTest=0 ; [[ "${CICDTEST_DO_LONGTEST}" == "1" ]] && doLongTest=1
 
+## Ignore the user's git config, so identity and hooks don't matter.
+export GIT_CONFIG_GLOBAL=/dev/null  GIT_CONFIG_NOSYSTEM=1
+unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE X9PS1_STANDARD
+
+## Scratch repos go under one folder this script makes, and removes on exit.
+declare scratchRoot=""
+
+fMakeRepo(){
+	local -r dir="${scratchRoot}/$1"  branch="$2"  remote="$3"
+	mkdir "${dir}"
+	git -C "${dir}" init -q -b "${branch}"
+	git -C "${dir}" -c user.name=test -c user.email=test@example.com commit -q --allow-empty -m test
+	git -C "${dir}" config remote.origin.url "${remote}"
+}
+
+## Run the prompt the way PROMPT_COMMAND does, expand it the way bash does before showing it, and count lines holding the text.
+## Takes variable names, not values, since fRunTest evals its command string.
+fCountShown(){
+	( cd "${scratchRoot}/$1" && PS1="$("${BASH}" "${exe1}")" && printf '%s\n' "${PS1@P}" ) | grep -cF -- "${!2}" || true
+}
+
+fCountRan(){
+	{ compgen -G "${scratchRoot}/$1/PWNED*" || true; } | wc -l
+}
+
+fRemoveScratch(){
+	[[ "$(basename "${scratchRoot}")" == x9ps1-test.* && -d "${scratchRoot}" ]] && rm -rf -- "${scratchRoot}"
+	:
+}
+
 fMain_Test(){
 
 	## Settings
@@ -59,6 +90,26 @@ fMain_Test(){
 #	fEcho_Clean "Version ......: $("${exe1}" --version)"
 	fEcho_Clean_Force
 #	sleep 1
+
+	####
+	#### Branch and remote names show as text, and run nothing
+	fEcho; fEcho ">>> TESTSECTION: Names from git"; fEcho
+
+	scratchRoot="$(mktemp -d -t x9ps1-test.XXXXXX)"
+	trap fRemoveScratch EXIT
+
+	local -r hostileBranch='$(touch${IFS}PWNED1)`touch${IFS}PWNED2`${HOME}'
+	local -r hostileRemote='https://example.com/$(touch PWNED3)/`touch PWNED4`/a\b.git'
+	local -r plainBranch="main"
+	local -r plainRemote="github.com:someone/plain.git"  ## Shown without the part up to '@'
+	fMakeRepo  hostile  "${hostileBranch}"  "${hostileRemote}"
+	fMakeRepo  plain    "${plainBranch}"    "git@${plainRemote}"
+
+	fRunTest  equal  1  "'fCountShown' hostile hostileBranch"
+	fRunTest  equal  1  "'fCountShown' hostile hostileRemote"
+	fRunTest  equal  0  "'fCountRan' hostile"
+	fRunTest  equal  1  "'fCountShown' plain plainBranch"
+	fRunTest  equal  1  "'fCountShown' plain plainRemote"
 
 
 #	####
