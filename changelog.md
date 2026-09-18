@@ -30,6 +30,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 - A branch or remote name holding `$(...)`, backticks or `${...}` ran as a command at every prompt. Names from git are now escaped before they go into PS1, and show as the characters they hold.
 
+- The git part showed only in a repository with an `origin` remote. It shows anywhere inside a working tree now. The remote shown is the one the branch tracks, then `origin`, then the first one, and none is fine.
+
+- The second mark only ever checked against `origin`, and the counts never showed. It checks against whatever the branch tracks, and shows how many commits ahead and behind, as `↑2↓1`.
+
+- The marks were read from `git status`'s English text, so a translated git always showed two crosses. They come from its porcelain output now, which is the same in every language.
+
 ## v1.0.1 build 1n1bed5 - 20260526
 
 ### Notes
