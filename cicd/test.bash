@@ -54,6 +54,22 @@ fMakeRepo(){
 
 ## Run the prompt the way PROMPT_COMMAND does, expand it the way bash does before showing it, and count lines holding the text.
 ## Takes variable names, not values, since fRunTest evals its command string.
+## A clone two commits ahead of its upstream and one behind, with the remote named as given.
+fMakeTracking(){
+	local -r dir="${scratchRoot}/$1"  remote="$2"
+	local -a who=(-c user.name=test -c user.email=test@example.com)
+	git init -q --bare -b main "${dir}.up"
+	git init -q -b main "${dir}.other"
+	git -C "${dir}.other" "${who[@]}" commit -q --allow-empty -m one
+	git -C "${dir}.other" push -q "${dir}.up" main
+	git clone -q -o "${remote}" "${dir}.up" "${dir}"
+	git -C "${dir}.other" "${who[@]}" commit -q --allow-empty -m two
+	git -C "${dir}.other" push -q "${dir}.up" main
+	git -C "${dir}" fetch -q "${remote}"
+	git -C "${dir}" "${who[@]}" commit -q --allow-empty -m three
+	git -C "${dir}" "${who[@]}" commit -q --allow-empty -m four
+}
+
 fCountShown(){
 	( cd "${scratchRoot}/$1" && PS1="$("${BASH}" "${exe1}")" && printf '%s\n' "${PS1@P}" ) | grep -cF -- "${!2}" || true
 }
@@ -110,6 +126,21 @@ fMain_Test(){
 	fRunTest  equal  0  "'fCountRan' hostile"
 	fRunTest  equal  1  "'fCountShown' plain plainBranch"
 	fRunTest  equal  1  "'fCountShown' plain plainRemote"
+
+	####
+	#### The git part shows with no origin, or no remote at all, and says how far from the upstream
+	fEcho; fEcho ">>> TESTSECTION: Git part"; fEcho
+
+	local -r loneBranch="lonebranch"
+	local -r trackedUrl="${scratchRoot}/tracked.up"
+	local -r aheadBehind="↑2↓1"
+	mkdir "${scratchRoot}/lone"
+	git -C "${scratchRoot}/lone" init -q -b "${loneBranch}"
+	fMakeTracking  tracked  upstream
+
+	fRunTest  equal  1  "'fCountShown' lone loneBranch"
+	fRunTest  equal  1  "'fCountShown' tracked trackedUrl"
+	fRunTest  equal  1  "'fCountShown' tracked aheadBehind"
 
 
 #	####
