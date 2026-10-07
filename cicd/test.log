@@ -1,54 +1,155 @@
-[20260917-200657.8689]  
-[20260917-200657.8690]  Exe source ...: /mnt/zfs/zf10/0-0/users/collierjr/data/prs/dev/github.com/jim-collier/x9ps1-git/github/bin/x9ps1-git
-[20260917-200657.8707]  
-[20260917-200657.8708]  [ >>> TESTSECTION: Names from git ]
-[20260917-200657.8716]  
-[20260917-200657.8918]  ✅ Passed: Test# 1 [Test mode: 'equal']
-[20260917-200657.8941]  Test command ...: 'fCountShown' hostile hostileBranch
-[20260917-200657.8953]  Expected value .: '1'
-[20260917-200657.8957]  Actual value ...: '1'
-[20260917-200657.8962]  
-[20260917-200657.9048]  ✅ Passed: Test# 2 [Test mode: 'equal']
-[20260917-200657.9071]  Test command ...: 'fCountShown' hostile hostileRemote
-[20260917-200657.9083]  Expected value .: '1'
-[20260917-200657.9088]  Actual value ...: '1'
-[20260917-200657.9092]  
-[20260917-200657.9093]  ✅ Passed: Test# 3 [Test mode: 'equal']
-[20260917-200657.9111]  Test command ...: 'fCountRan' hostile
-[20260917-200657.9123]  Expected value .: '0'
-[20260917-200657.9130]  Actual value ...: '0'
-[20260917-200657.9137]  
-[20260917-200657.9215]  ✅ Passed: Test# 4 [Test mode: 'equal']
-[20260917-200657.9238]  Test command ...: 'fCountShown' plain plainBranch
-[20260917-200657.9249]  Expected value .: '1'
-[20260917-200657.9253]  Actual value ...: '1'
-[20260917-200657.9258]  
-[20260917-200657.9345]  ✅ Passed: Test# 5 [Test mode: 'equal']
-[20260917-200657.9367]  Test command ...: 'fCountShown' plain plainRemote
-[20260917-200657.9377]  Expected value .: '1'
-[20260917-200657.9382]  Actual value ...: '1'
-[20260917-200657.9387]  
-[20260917-200657.9387]  [ >>> TESTSECTION: Git part ]
-[20260917-200657.9394]  
-[20260917-200657.9894]  ✅ Passed: Test# 6 [Test mode: 'equal']
-[20260917-200657.9917]  Test command ...: 'fCountShown' lone loneBranch
-[20260917-200657.9928]  Expected value .: '1'
-[20260917-200657.9933]  Actual value ...: '1'
-[20260917-200657.9938]  
-[20260917-200658.0014]  ✅ Passed: Test# 7 [Test mode: 'equal']
-[20260917-200658.0038]  Test command ...: 'fCountShown' tracked trackedUrl
-[20260917-200658.0049]  Expected value .: '1'
-[20260917-200658.0054]  Actual value ...: '1'
-[20260917-200658.0058]  
-[20260917-200658.0134]  ✅ Passed: Test# 8 [Test mode: 'equal']
-[20260917-200658.0157]  Test command ...: 'fCountShown' tracked aheadBehind
-[20260917-200658.0169]  Expected value .: '1'
-[20260917-200658.0174]  Actual value ...: '1'
-[20260917-200658.0179]  
-[20260917-200658.0180]  Results:
-[20260917-200658.0182]  Total tests .........: 8
-[20260917-200658.0188]  Passed ..............: 8
-[20260917-200658.0193]  Failed ..............: 0
-[20260917-200658.0199]  Expected errors .....: 0
-[20260917-200658.0204]  Unexpected errors ...: 0
-[20260917-200658.0209]  
+[20261006-182153.7705]  
+[20261006-182153.7707]  Exe source ...: /mnt/zfs/zf10/0-0/users/collierjr/data/prs/dev/github.com/jim-collier/x9ps1-git/github/bin/x9ps1-git
+[20261006-182153.7725]  
+[20261006-182153.7725]  [ >>> TESTSECTION: Names from git ]
+[20261006-182153.7733]  
+[20261006-182153.7907]  ✅ Passed: Test# 1 [Test mode: 'equal']
+[20261006-182153.7931]  Test command ...: 'fCountShown' hostile hostileBranch
+[20261006-182153.7943]  Expected value .: '1'
+[20261006-182153.7948]  Actual value ...: '1'
+[20261006-182153.7953]  
+[20261006-182153.8000]  ✅ Passed: Test# 2 [Test mode: 'equal']
+[20261006-182153.8024]  Test command ...: 'fCountShown' hostile hostileRemote
+[20261006-182153.8035]  Expected value .: '1'
+[20261006-182153.8040]  Actual value ...: '1'
+[20261006-182153.8045]  
+[20261006-182153.8046]  ✅ Passed: Test# 3 [Test mode: 'equal']
+[20261006-182153.8066]  Test command ...: 'fCountRan' hostile
+[20261006-182153.8074]  Expected value .: '0'
+[20261006-182153.8079]  Actual value ...: '0'
+[20261006-182153.8084]  
+[20261006-182153.8140]  ✅ Passed: Test# 4 [Test mode: 'equal']
+[20261006-182153.8168]  Test command ...: 'fCountShown' plain plainBranch
+[20261006-182153.8179]  Expected value .: '1'
+[20261006-182153.8184]  Actual value ...: '1'
+[20261006-182153.8189]  
+[20261006-182153.8239]  ✅ Passed: Test# 5 [Test mode: 'equal']
+[20261006-182153.8265]  Test command ...: 'fCountShown' plain plainRemote
+[20261006-182153.8278]  Expected value .: '1'
+[20261006-182153.8283]  Actual value ...: '1'
+[20261006-182153.8287]  
+[20261006-182153.8288]  [ >>> TESTSECTION: Git part ]
+[20261006-182153.8296]  
+[20261006-182153.8817]  ✅ Passed: Test# 6 [Test mode: 'equal']
+[20261006-182153.8841]  Test command ...: 'fCountShown' lone loneBranch
+[20261006-182153.8852]  Expected value .: '1'
+[20261006-182153.8857]  Actual value ...: '1'
+[20261006-182153.8862]  
+[20261006-182153.8916]  ✅ Passed: Test# 7 [Test mode: 'equal']
+[20261006-182153.8940]  Test command ...: 'fCountShown' tracked trackedUrl
+[20261006-182153.8952]  Expected value .: '1'
+[20261006-182153.8957]  Actual value ...: '1'
+[20261006-182153.8962]  
+[20261006-182153.9016]  ✅ Passed: Test# 8 [Test mode: 'equal']
+[20261006-182153.9040]  Test command ...: 'fCountShown' tracked aheadBehind
+[20261006-182153.9051]  Expected value .: '1'
+[20261006-182153.9056]  Actual value ...: '1'
+[20261006-182153.9061]  
+[20261006-182153.9062]  [ >>> TESTSECTION: Sourced ]
+[20261006-182153.9068]  
+[20261006-182153.9113]  ✅ Passed: Test# 9 [Test mode: 'equal']
+[20261006-182153.9136]  Test command ...: 'fCountShownSourced' hostile hostileBranch
+[20261006-182153.9149]  Expected value .: '1'
+[20261006-182153.9154]  Actual value ...: '1'
+[20261006-182153.9159]  
+[20261006-182153.9213]  ✅ Passed: Test# 10 [Test mode: 'equal']
+[20261006-182153.9235]  Test command ...: 'fCountShownSourced' hostile hostileRemote
+[20261006-182153.9249]  Expected value .: '1'
+[20261006-182153.9254]  Actual value ...: '1'
+[20261006-182153.9258]  
+[20261006-182153.9259]  ✅ Passed: Test# 11 [Test mode: 'equal']
+[20261006-182153.9276]  Test command ...: 'fCountRan' hostile
+[20261006-182153.9284]  Expected value .: '0'
+[20261006-182153.9289]  Actual value ...: '0'
+[20261006-182153.9294]  
+[20261006-182153.9353]  ✅ Passed: Test# 12 [Test mode: 'equal']
+[20261006-182153.9376]  Test command ...: 'fCountShownSourced' plain plainRemote
+[20261006-182153.9389]  Expected value .: '1'
+[20261006-182153.9394]  Actual value ...: '1'
+[20261006-182153.9399]  
+[20261006-182153.9449]  ✅ Passed: Test# 13 [Test mode: 'equal']
+[20261006-182153.9473]  Test command ...: 'fCountShownSourced' lone loneBranch
+[20261006-182153.9485]  Expected value .: '1'
+[20261006-182153.9491]  Actual value ...: '1'
+[20261006-182153.9495]  
+[20261006-182153.9559]  ✅ Passed: Test# 14 [Test mode: 'equal']
+[20261006-182153.9582]  Test command ...: 'fCountShownSourced' tracked trackedUrl
+[20261006-182153.9595]  Expected value .: '1'
+[20261006-182153.9600]  Actual value ...: '1'
+[20261006-182153.9605]  
+[20261006-182153.9667]  ✅ Passed: Test# 15 [Test mode: 'equal']
+[20261006-182153.9691]  Test command ...: 'fCountShownSourced' tracked aheadBehind
+[20261006-182153.9704]  Expected value .: '1'
+[20261006-182153.9710]  Actual value ...: '1'
+[20261006-182153.9714]  
+[20261006-182153.9715]  [ >>> TESTSECTION: Finding the repository ]
+[20261006-182153.9724]  
+[20261006-182153.9832]  ✅ Passed: Test# 16 [Test mode: 'equal']
+[20261006-182153.9860]  Test command ...: 'fCountShownSourced' tracked/sub/deeper trackedUrl
+[20261006-182153.9875]  Expected value .: '1'
+[20261006-182153.9880]  Actual value ...: '1'
+[20261006-182153.9885]  
+[20261006-182153.9940]  ✅ Passed: Test# 17 [Test mode: 'equal']
+[20261006-182153.9965]  Test command ...: 'fCountShownSourced' wt wtBranch
+[20261006-182153.9976]  Expected value .: '1'
+[20261006-182153.9981]  Actual value ...: '1'
+[20261006-182153.9986]  
+[20261006-182154.0037]  ✅ Passed: Test# 18 [Test mode: 'equal']
+[20261006-182154.0061]  Test command ...: 'fCountShownSourced' lonelink loneBranch
+[20261006-182154.0074]  Expected value .: '1'
+[20261006-182154.0079]  Actual value ...: '1'
+[20261006-182154.0083]  
+[20261006-182154.0133]  ✅ Passed: Test# 19 [Test mode: 'equal']
+[20261006-182154.0157]  Test command ...: '.git' 'fCountShownSourced' outside loneBranch
+[20261006-182154.0172]  Expected value .: '1'
+[20261006-182154.0177]  Actual value ...: '1'
+[20261006-182154.0181]  
+[20261006-182154.0212]  ✅ Passed: Test# 20 [Test mode: 'equal']
+[20261006-182154.0237]  Test command ...: 'fCountShownSourced' outside markYes
+[20261006-182154.0248]  Expected value .: '0'
+[20261006-182154.0253]  Actual value ...: '0'
+[20261006-182154.0258]  
+[20261006-182154.0282]  ✅ Passed: Test# 21 [Test mode: 'equal']
+[20261006-182154.0307]  Test command ...: 'fCountShownSourced' outside markNo
+[20261006-182154.0319]  Expected value .: '0'
+[20261006-182154.0324]  Actual value ...: '0'
+[20261006-182154.0328]  
+[20261006-182154.0354]  ✅ Passed: Test# 22 [Test mode: 'equal']
+[20261006-182154.0377]  Test command ...: 'fCountShownSourced' / markYes
+[20261006-182154.0389]  Expected value .: '0'
+[20261006-182154.0394]  Actual value ...: '0'
+[20261006-182154.0398]  
+[20261006-182154.0422]  ✅ Passed: Test# 23 [Test mode: 'equal']
+[20261006-182154.0446]  Test command ...: 'fCountShownSourced' / markNo
+[20261006-182154.0457]  Expected value .: '0'
+[20261006-182154.0462]  Actual value ...: '0'
+[20261006-182154.0467]  
+[20261006-182154.0467]  [ >>> TESTSECTION: Processes per prompt ]
+[20261006-182154.0476]  
+[20261006-182157.1298]  ✅ Passed: Test# 24 [Test mode: 'equal']
+[20261006-182157.1326]  Test command ...: 'fCountProcs' outside
+[20261006-182157.1335]  Expected value .: '0'
+[20261006-182157.1340]  Actual value ...: '0'
+[20261006-182157.1345]  
+[20261006-182200.3762]  ✅ Passed: Test# 25 [Test mode: 'equal']
+[20261006-182200.3786]  Test command ...: 'fCountProcs' tracked/sub/deeper
+[20261006-182200.3797]  Expected value .: '2'
+[20261006-182200.3803]  Actual value ...: '2'
+[20261006-182200.3807]  
+[20261006-182203.5492]  ✅ Passed: Test# 26 [Test mode: 'equal']
+[20261006-182203.5518]  Test command ...: 'fCountProcs' outside oneliner
+[20261006-182203.5528]  Expected value .: '1'
+[20261006-182203.5533]  Actual value ...: '1'
+[20261006-182203.5538]  
+[20261006-182206.8115]  ✅ Passed: Test# 27 [Test mode: 'equal']
+[20261006-182206.8142]  Test command ...: 'fCountProcs' tracked/sub/deeper oneliner
+[20261006-182206.8156]  Expected value .: '3'
+[20261006-182206.8161]  Actual value ...: '3'
+[20261006-182206.8166]  
+[20261006-182206.8166]  Results:
+[20261006-182206.8169]  Total tests .........: 27
+[20261006-182206.8174]  Passed ..............: 27
+[20261006-182206.8180]  Failed ..............: 0
+[20261006-182206.8186]  Expected errors .....: 0
+[20261006-182206.8191]  Unexpected errors ...: 0
+[20261006-182206.8196]  
