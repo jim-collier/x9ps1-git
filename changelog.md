@@ -26,7 +26,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## Unreleased
 
+### Changed
+
+- The script can be sourced from `.bashrc`, with `PROMPT_COMMAND='fX9ps1Git_SetPs1'`. Outside a git working tree the prompt then starts no process, where it used to start five, and inside one it runs git twice, where it started thirteen processes. The old one-liner still works, at one new bash per prompt.
+
+- A directory is checked for a `.git` above it before git is asked anything. A `.git` file counts, as in a linked worktree, and so does `GIT_DIR`. A symlink on the way up still asks git, since git goes by the real path.
+
+- With `X9PS1_STANDARD=1`, a sourced copy asks `tput` once per shell instead of every prompt.
+
 ### Fixed
+
+- With no `origin` and no remote tracked, the first remote by name was picked even when it had no URL, so no repository showed. It's the first one with a URL now.
 
 - A branch or remote name holding `$(...)`, backticks or `${...}` ran as a command at every prompt. Names from git are now escaped before they go into PS1, and show as the characters they hold.
 
