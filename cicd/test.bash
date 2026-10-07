@@ -37,6 +37,10 @@
 set -e
 declare doLongTest=0 ; [[ "${CICDTEST_DO_LONGTEST}" == "1" ]] && doLongTest=1
 
+## The bash the prompt runs under. X9PS1_TEST_BASH can name an older one, such as macOS's 3.2;
+## the expansion to what's shown is always done by this one, since ${PS1@P} needs 4.4.
+declare testBash="${X9PS1_TEST_BASH:-${BASH}}"
+
 ## Ignore the user's git config, so identity and hooks don't matter.
 export GIT_CONFIG_GLOBAL=/dev/null  GIT_CONFIG_NOSYSTEM=1
 unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE X9PS1_STANDARD
@@ -72,6 +76,36 @@ fMakeTracking(){
 
 fCountShown(){
 	( cd "${scratchRoot}/$1" && PS1="$("${BASH}" "${exe1}")" && printf '%s\n' "${PS1@P}" ) | grep -cF -- "${!2}" || true
+}
+
+## The same, through the sourced form .bashrc sets up. Takes a path under the scratch folder, or an absolute one.
+fShownSourced(){
+	local dir="$1"; [[ "${dir}" == /* ]] || dir="${scratchRoot}/${dir}"
+	( cd "${dir}" && PS1="$("${testBash}" --norc --noprofile -c 'source "$1" && fX9ps1Git_SetPs1 && printf "%s" "${PS1}"' x "${exe1}")" && printf '%s\n' "${PS1@P}" )
+}
+fCountShownSourced(){
+	fShownSourced "$1" | grep -cF -- "${!2}" || true
+}
+
+## Processes started per prompt, by an interactive bash set up the way the installation steps say.
+## 'oneliner' as $2 uses the older PROMPT_COMMAND='PS1=`x9ps1-git`' instead. Counted as the
+## difference between 2 prompts and 12, since a system bashrc runs its own commands at startup.
+## A process that only runs now and then shows as a fraction.
+fCountProcs(){
+	local -r dir="${scratchRoot}/$1"  trace="${scratchRoot}/strace.out"  rcFile="${scratchRoot}/bashrc"
+	if [[ "${2:-}" == "oneliner" ]]; then
+		printf "PROMPT_COMMAND='PS1=\$(\"\${BASH}\" %q)'\n" "${exe1}" > "${rcFile}"
+	else
+		printf 'source %q\nPROMPT_COMMAND=fX9ps1Git_SetPs1\n' "${exe1}" > "${rcFile}"
+	fi
+	local -i forks=0  few=0  lines=0
+	for lines in 1 11; do
+		( cd "${dir}" && strace -f -qq -e trace=clone,clone3,fork,vfork -o "${trace}" "${testBash}" --noprofile --rcfile "${rcFile}" -i < <(yes : | head -n "${lines}") >/dev/null 2>&1 ) || true
+		few=${forks}
+		forks="$(grep -cE '(clone3?|v?fork)\(' "${trace}" || true)"
+	done
+	forks=$((forks - few))
+	if ((forks % 10)); then echo "${forks}/10"; else echo "$((forks / 10))"; fi
 }
 
 fCountRan(){
@@ -141,6 +175,52 @@ fMain_Test(){
 	fRunTest  equal  1  "'fCountShown' lone loneBranch"
 	fRunTest  equal  1  "'fCountShown' tracked trackedUrl"
 	fRunTest  equal  1  "'fCountShown' tracked aheadBehind"
+
+	####
+	#### Sourced, the way .bashrc sets it up, it shows the same
+	fEcho; fEcho ">>> TESTSECTION: Sourced"; fEcho
+
+	fRunTest  equal  1  "'fCountShownSourced' hostile hostileBranch"
+	fRunTest  equal  1  "'fCountShownSourced' hostile hostileRemote"
+	fRunTest  equal  0  "'fCountRan' hostile"
+	fRunTest  equal  1  "'fCountShownSourced' plain plainRemote"
+	fRunTest  equal  1  "'fCountShownSourced' lone loneBranch"
+	fRunTest  equal  1  "'fCountShownSourced' tracked trackedUrl"
+	fRunTest  equal  1  "'fCountShownSourced' tracked aheadBehind"
+
+	####
+	#### The repository is found from below it, through a .git file, through GIT_DIR and through a symlink, and not from outside
+	fEcho; fEcho ">>> TESTSECTION: Finding the repository"; fEcho
+
+	local -r markYes="✔"  markNo="✘"  ## Only the git part has them
+	local -r wtBranch="wtbranch"
+	mkdir -p "${scratchRoot}/tracked/sub/deeper" "${scratchRoot}/outside"
+	git -C "${scratchRoot}/tracked" worktree add -q -b "${wtBranch}" "${scratchRoot}/wt"
+	ln -s "${scratchRoot}/lone" "${scratchRoot}/lonelink"
+
+	fRunTest  equal  1  "'fCountShownSourced' tracked/sub/deeper trackedUrl"
+	fRunTest  equal  1  "'fCountShownSourced' wt wtBranch"
+	fRunTest  equal  1  "'fCountShownSourced' lonelink loneBranch"
+	fRunTest  equal  1  "GIT_DIR='${scratchRoot}/lone/.git' 'fCountShownSourced' outside loneBranch"
+	fRunTest  equal  0  "'fCountShownSourced' outside markYes"
+	fRunTest  equal  0  "'fCountShownSourced' outside markNo"
+	fRunTest  equal  0  "'fCountShownSourced' / markYes"
+	fRunTest  equal  0  "'fCountShownSourced' / markNo"
+
+	####
+	#### Processes per prompt: none outside a git working tree, and just the two git calls inside one
+	fEcho; fEcho ">>> TESTSECTION: Processes per prompt"; fEcho
+
+	if strace -f -qq -o /dev/null true >/dev/null 2>&1; then
+		fRunTest  equal  0  "'fCountProcs' outside"
+		fRunTest  equal  2  "'fCountProcs' tracked/sub/deeper"
+		if [[ "${testBash}" == "${BASH}" ]]; then
+			fRunTest  equal  1  "'fCountProcs' outside oneliner"  ## The new bash alone
+			fRunTest  equal  3  "'fCountProcs' tracked/sub/deeper oneliner"
+		fi
+	else
+		fEcho "strace can't run here, so the process counts were skipped."
+	fi
 
 
 #	####
@@ -249,3 +329,4 @@ fEntryPoint | fPipe_LogAndShowPartialOutput
 ##	Script history:
 #••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
 ##		- 20260621 JC: Copied and updated from another project.
+##		- 20261006 JC: Sourced form, finding the repository, and processes per prompt. X9PS1_TEST_BASH runs it all under another bash.

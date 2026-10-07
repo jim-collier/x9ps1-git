@@ -111,8 +111,13 @@ sudo wget https://raw.githubusercontent.com/jim-collier/x9ps1-git/main/bin/x9ps1
 sudo chmod +x x9ps1-git
 
 ## Apply to current terminal prompt
-PROMPT_COMMAND='PS1=`x9ps1-git`'
+source x9ps1-git
+PROMPT_COMMAND='fX9ps1Git_SetPs1'
 
-## Add the command to your personal .bashrc so that all terminals get the prompt
-echo -e "\nPROMPT_COMMAND='PS1=`x9ps1-git`'\n" | tee -a ~/.bashrc
+## Add both lines to your personal .bashrc so that all terminals get the prompt
+echo -e "\nsource x9ps1-git\nPROMPT_COMMAND='fX9ps1Git_SetPs1'\n" | tee -a ~/.bashrc
 ~~~
+
+Sourcing it only defines a few `fX9ps1Git_*` functions. Outside a git working tree the prompt starts no process at all, and inside one it runs git twice.
+
+The older one-liner, ``PROMPT_COMMAND='PS1=`x9ps1-git`'``, still works. It starts a new bash for every prompt though.
