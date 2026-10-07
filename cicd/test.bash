@@ -208,6 +208,18 @@ fMain_Test(){
 	fRunTest  equal  0  "'fCountShownSourced' / markNo"
 
 	####
+	#### The arrow starting the second line is one a Mac has a font for, there
+	fEcho; fEcho ">>> TESTSECTION: Arrow"; fEcho
+
+	local -r macArrow="➜"  otherArrow="🡆"
+	fRunTest  equal  1  "OSTYPE=darwin23 'fCountShownSourced' tracked macArrow"
+	fRunTest  equal  0  "OSTYPE=darwin23 'fCountShownSourced' tracked otherArrow"
+	fRunTest  equal  1  "OSTYPE=darwin23 'fCountShown' tracked macArrow"
+	fRunTest  equal  1  "OSTYPE=linux-gnu 'fCountShownSourced' tracked otherArrow"
+	fRunTest  equal  0  "OSTYPE=linux-gnu 'fCountShownSourced' tracked macArrow"
+	fRunTest  equal  0  "OSTYPE=darwin23 'fCountShownSourced' outside macArrow"
+
+	####
 	#### Processes per prompt: none outside a git working tree, and just the two git calls inside one
 	fEcho; fEcho ">>> TESTSECTION: Processes per prompt"; fEcho
 
@@ -330,3 +342,4 @@ fEntryPoint | fPipe_LogAndShowPartialOutput
 #••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
 ##		- 20260621 JC: Copied and updated from another project.
 ##		- 20261006 JC: Sourced form, finding the repository, and processes per prompt. X9PS1_TEST_BASH runs it all under another bash.
+##		- 20261007 JC: The arrow on macOS.
