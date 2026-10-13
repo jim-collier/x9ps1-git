@@ -111,17 +111,25 @@ Since this script is moving towards more idiomatic standards-compliance anyway, 
 ### Added
 
 - Added unit testing functions back in [re-created actually], simpler and lighter-weight. [≅2025-07-06 to 11]
+
 - Brought debugging/profiling functions back in from older bigger template branch. (Profiling = tracing code paths, but not counting and timing....yet.) [≅2025-06]
+
 - Added simple suite of generic logging functions. (Rather than refactoring much older more complicated logging code from a many-years-old branch of this template.) Logging is a great candidate for a set of generic functions, as it is frequently needed and can consume a lot of lines of code doing the same thing in every script, often in slightly different ways. [≅2025-06]
+
 - A pretty useful collection of functions to scan a filesystem by one or more specific object types [including broken links], and narrow-down the results with successive passes of include or exclude regex filters. [≅2025-07-01 to 12]
 	- This could be - and is - done with simply with `find` and multiple passes of `grep -E`. But these functions wrap that in a reasonably simple, clean, and lightweight way that still makes it worth the effort. In the future it may integrate with a filesystem "records & fields"-based toolset in the works that can deal with things like xattrs, EXIF/XMP, and advanced filenaming (including basing filenames on metadata - *or vice-versa*.)
+
 - Created or added back in from older templates and refactored, several once-discarded functions that were missed. [≅2025-07-06 to 11]
+
 - Added reentrant startup routing back in, this time much simpler and more sane, having learned lessons from previous efforts at "auto-routing" reentrant templates. [≅2025-07-06 to 11]
 	- Can now relaunch as any user, not just sudo.
 	- The [re]entry and exit points make a lot more sense now.
+
 - Checking for dependencies is now much easier, with dedicated functions. [≅2025-07-10]
 	- That themselves, internally, are horribly convoluted in order to create and test fRecord_*() along the way. They could have just been very simple string manipulations.
+
 - Added a HEREDOC section illustrating generic function usage examples. [≅2025-06]
+
 - Added some associative array handling functions, fRecord_\* and fAssArr_\*. Although conceptually cool in the context of limited Bash, they're probably pretty slow in large loop contexts, so maybe don't use for performance-critical bottlenecks. (Line-delimited strings at best, or multiple arrays with matching integer indexes at worst, is probably the better performance-preserving alternative.)  [≅2025-07-06 to 11]
 
 ### Changed
@@ -133,32 +141,49 @@ Since this script is moving towards more idiomatic standards-compliance anyway, 
 		- Doesn't necessarily exit, in some cases returns non-0.
 		- Error message is simpler and goes to `stderr` rather than `stdout`.
 		- Sets global `$_ErrVal` so that the value persists longer (or even at all), for detection/inspection by callers. Although it gets reset when error-handling changes, calling code should set it `=0` before calling something it wants to check afterward.
+
 - Instead of returning boolean values by echo (either integers `0|1` or the even more ancient strings `"true"|"false"`), they do it the bash way: `return 0` for success, `1` for non success, or `>2` for error if possible. [≅2025-07-06 to 11]
 	- Functions that modify values (eg trim a string), take a variable *nameref* (e.g. `local -n callerVar=$1`), and update its value in-place. (But within the function, vis-a-vi a temp variable so that the setting of result is atomic only on success, or possibly after an initial setting of default in case of error.)
 	- Functions that "return" a value of a fundamentally different type than input (e.g. integer to string date), also take a *nameref* for return value, but also an additional parameter (usually read-only) as input for the value to transform into output.
 	- If the function accepts multiple inputs that may be so memory-large that making a copy might be crazy inefficient especially inside a loop, it may accept more than one variable *nameref*.
 	- Bash isn't very helpful with error messaging when you forget to provide a *nameref*. So efforts are made to validate *nameref* arguments and throw better errors.
+
 - For fCopyright(), fAbout(), and fSyntax(): Changed back from HEREDOC format to fEcho_Clean. [≅2025-06]
 	- HEREDOC, while easier to work with on the surface, is actually too hard for most editors to work with - vis-a-vis mix of tabs and spaces for script-formatting vs output indenting. It's just not worth the constant fuss, unless it's just a big blob of unindented paragraphs.
+
 - Refactored or rewrote at least a dozen existing functions, to be simpler and more bash-idiomatic. [≅2025-06 to 07]
+
 - Moved this changelog out of the template itself, and into this doc. (And reversed the chronology, and converted to md format.)
+
 - Added the venerable flag 'doPromptToContinue' back in! Thought it would never happen. But along with 'doQuietly', which is now longer rendundant, is a quick an easy way to add prompt-to-contiue-ing in and out with ease.
+
 - Renamed most \_f*() functions to just f*() for user-fliendliness.
+
 - Moved unit testing out of main template, now 'source' template from testing scripts.
+
 - Tested main template needed modification to be able to run "sourced" from one or more unit-testing files. (No changes needed.)
+
 - Split single copyright notice into two: one for template consumer & script author, second for 'based on' template author.
+
 - Improved help comments in fParseArgs().
+
 - Updated some old counter increment styles to e.g. ((counter++)).
+
 - Moved some function groups around so that the two most core, integral groups [e.g. fEcho*() and error-handling] are at the bottom in their own group, but in otherwise in the main generic section, the easiest to delete appears lowest.
+
 - Added function group header fields 'Can be deleted?' and 'Statefulness'.
+
 - Moved error-handling set-up directly underneath error-handling functions.
+
 - Added fDefineTrap_Error_ExitOnThrow() for future use with 'set +e' (which will probably never migrate too as the developer overhead is too damn high).
 	- Instead, significantly mitigate with `set -e` with `set -E`, `set -o pipefail`, and `shopt -s inherit_errexit`.
+
 - Added `set -u`, which required a significant amount of refactoring (mostly via search and replace) to give all numbered args default empty values, e.g. "${1:-}". That didn't change any existing expected behavior. Existing unit tests still pass.
 
 ### Removed
 
 - Removed or refactored most or all *_byecho() functions. [≅2025-07]
+
 - Moved several low-use functions to an out-of-repo 'extras' script that will probably be forgotten. [≅2025-07-06 to 11]
 
 ### Other work
@@ -172,13 +197,17 @@ Since this script is moving towards more idiomatic standards-compliance anyway, 
 ## 20250606-07
 
 - Added \_fGetFileSize(), \_fTime_EpochAndMS_TruncateMS(), \_fGetFileTime_mtime()
+
 - Added \_fNormStr() back in.
 
 ## 20250319
 
 - Increased argument passing from 20 to 50.
+
 - Added \_fAppendStr(), \_fPad_Right(), \_fBase10to32c(), \_fBase10to256j1(), \_ConditionalSandwichStr(), \_fEchoVals()
+
 - Removed: \_fstrAppend_byglobal_val(). ##			- Improved fParseArgs().
+
 - Replaced \_fConditionalStr_byecho() with \_fTernaryStr(), with different interface.
 
 ## 20241024
@@ -196,6 +225,7 @@ Since this script is moving towards more idiomatic standards-compliance anyway, 
 ## 20240912
 
 - Improved error output.
+
 - Fixed bug in fThrowError().
 
 ## 20240623
@@ -205,13 +235,20 @@ Since this script is moving towards more idiomatic standards-compliance anyway, 
 ## 20190926
 
 - Added debugging functions and variables: \_dbgNestLevel, \_dbgIndentEachLevelBy, \_fdbgEnter1(), \_fdbgEgress1(), \_fdbgEcho1(), \_fPipeAllRawStdout1()
+
 - Changed everything beginning with "__" to "_"
+
 - Added to the end of every "function(){" statement:
+
 - Begin to change use of "${variable}" to just "$variable" to quicken dev and improve readability.
+
 - Begin use of bash built-in $FUNCNAME.
+
 - Appended "1" to every library function so that:
 	- Maintain backward compatibility when copy/pasting everything below a certain line to provide "library" updates to legacy scripts.
+
 - Renamed functions that return something by echo, *_byecho
+
 - Renamed functions that returns something by global variable, *_byglobal
 
 ## 20190925
@@ -219,22 +256,30 @@ Since this script is moving towards more idiomatic standards-compliance anyway, 
 - Added functions:
 	fTemplate(), \_fUnitTest1(), \_fAssert_AreEqual1(), \_fAssert_Eval_AreEqual1(), \_fStrJustify1_byecho()
 	_fdbgEchoVarAndVal1(), \_fIndent_relative1(), \_fStrKeepLeftN1_byecho(), \_fStrKeepRightN1_byecho(), \_fToInt1_byecho(), \_fIndent_rltv1_pipe()
+
 - Renamed \_fIndent1() to \_fIndent_abs1_pipe()
+
 - Added routing logic to detect '--unit-test'
+
 - Converted the following functions from modifying named variables, to returning value via echo (due to 'eval' expression causing runtime errors due to unescaped problem characters in output strings):
 	_fEscapeStr1_byecho()
 	_fNormalizePath1_byecho()
 	_fNormalizeDir1_byecho()
+
 - \_fstrAppend1_DEPRECATED_byref()
 	- Added a message to not use it (so it won't break existing scripts if template code updated).
 	- Added \_fstrAppend1_byglobal() to use instead.
+
 - Enhanced \_fpStrOps_TempReplacements1_byecho(), and \_fEscapeStr1_byecho()
+
 - Added an input argument to \_fEchoVarAndVal1(): function name.
+
 - Added global constant: doDebug=0.
 
 ## 20190925
 
 - Added \_fPipe_Blake12_Base64URL(), \_fPipe_Uuid_Base164URL()
+
 - Renamed _Indent() to \_fIndent_abs1_pipe()
 
 ## 20190923
@@ -264,14 +309,19 @@ Since this script is moving towards more idiomatic standards-compliance anyway, 
 ## 20171217
 
 - Forked 0_library_v1 to _v2 (leaving \_v1 intact as another 'legacy' library), and:
+
 - Moved execution logic to library.
+
 - Fuller use of fPackArgs() and fUnpackArgs().
+
 - Created unit-testing functions.
+
 - Created generic logging functionality.
 
 ## 20170314
 
 - Forked to 0_library_v1, leaving now 'legacy' 0_library intact as its referenced by many scripts.
+
 - Added several regex, math, and hex related functions. As well as fForceUmount(), fIsMounted() fDo_IgnoreError(), fEchoAndDo_IgnoreError().
 
 ## 20161003
@@ -393,4 +443,5 @@ Since this script is moving towards more idiomatic standards-compliance anyway, 
 ## 20110506 First official version.
 
 - Added logic to execute arbitrary subroutine as sudo, without necessarily setting cgtbProfile flag.
+
 - Added profiling of functions here, since removed from execution engine and exit handler.
